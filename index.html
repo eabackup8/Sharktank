@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shark Tank India Game</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-900 text-white font-sans">
+    <div class="container mx-auto mt-10 px-4">
+        <h1 class="text-4xl font-bold mb-8 text-center">Shark Tank India Game</h1>
+        <div id="questionSection" class="bg-gray-800 shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-xl font-semibold mb-4">Question from the Shark</h2>
+            <p id="question" class="mb-4"></p>
+            <textarea id="answerInput"
+                class="w-full px-4 py-3 rounded-lg border border-gray-700 bg-gray-700 text-white placeholder-gray-400 focus:outline-none focus:border-blue-500"
+                placeholder="Your answer..." aria-label="Answer Input"></textarea>
+            <button onclick="nextQuestion()"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 mt-4 rounded-lg focus:outline-none focus:shadow-outline">Next
+                Question</button>
+        </div>
+        <div id="resultSection" class="hidden">
+            <h2 class="text-2xl font-bold mb-4">Results</h2>
+            <div id="resultText"></div>
+            <div id="feedbackSection" class="mt-8">
+                <h3 class="text-lg font-semibold mb-2">Rate the Decision</h3>
+                <div class="flex justify-center space-x-4">
+                    <button onclick="rateDecision('accurate')"
+                        class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">Accurate</button>
+                    <button onclick="rateDecision('inaccurate')"
+                        class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:shadow-outline">Inaccurate</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        const questions = [
+            "Business Model: How does your business make money? What are your revenue streams?",
+            "Market and Competition: What is the size of your target market? Who are your competitors and what sets you apart from them?",
+            "Financials: What are your current sales figures? What is your profit margin? How do you plan to use the investment funds?",
+            "Scalability and Growth: How scalable is your business? What are your growth projections for the next few years?",
+            "Team and Expertise: Who is on your team and what are their roles? What expertise does your team bring to the business?",
+            "Product or Service: Can you demonstrate your product or service? What are the key features and benefits?",
+            "Challenges and Risks: What are the main challenges you face? How do you plan to mitigate risks?",
+            "Exit Strategy: What is your exit strategy for investors? How do you plan to provide returns on their investment?"
+        ];
+
+        const investorDecisions = {
+            "Ashneer Grover": "🚫 Ye sab dogla pan hai. I'm out because you're doing too many things, and I don't believe in that.",
+            "Anupam Mittal": "💭 Your valuation is based on your dreams, not on reality.",
+            "Vineeta Singh": "❌ I don't see this product solving a real problem in the market.",
+            "Aman Gupta": "🤔 I'm interested in your business, but I'm not convinced about the valuation.",
+            "Peyush Bansal": "⚠️ I'm concerned about the scalability of your business model."
+        };
+
+        let currentQuestionIndex = 0;
+        let answers = [];
+
+        function nextQuestion() {
+            const answer = document.getElementById("answerInput").value.trim();
+            if (answer === "") {
+                alert("Please provide an answer.");
+                return;
+            }
+
+            answers.push(answer);
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                displayQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function displayQuestion() {
+            document.getElementById("question").textContent = questions[currentQuestionIndex];
+            document.getElementById("answerInput").value = "";
+        }
+
+        function showResults() {
+            document.getElementById("questionSection").style.display = "none";
+            document.getElementById("resultSection").classList.remove("hidden");
+
+            let resultHTML = "<strong class='text-xl'>Results:</strong><br><br>";
+            for (let i = 0; i < questions.length; i++) {
+                resultHTML += `<div class="mb-6">
+                                    <p class="text-lg font-semibold mb-1">Question ${i + 1}:</p>
+                                    <p class="mb-3">${questions[i]}</p>
+                                    <p class="text-lg font-semibold mb-1">Answer:</p>
+                                    <p class="mb-3">${answers[i]}</p>
+                                </div>`;
+            }
+
+            // Display all investor decisions
+            for (const [investor, decision] of Object.entries(investorDecisions)) {
+                resultHTML += `<div class="bg-gray-800 shadow-md rounded-lg p-4 mb-4">
+                                    <p class="text-lg font-semibold mb-2">${investor} Decision:</p>
+                                    <p class="text-base">${decision}</p>
+                                </div>`;
+            }
+            document.getElementById("resultText").innerHTML = resultHTML;
+        }
+
+        function rateDecision(rating) {
+            if (rating === 'inaccurate') {
+                alert("Don't waste your time. Focus on your job.");
+            } else {
+                alert(`You rated the decision as: ${rating}`);
+            }
+        }
+
+        displayQuestion();
+    </script>
+</body>
+
+</html>
